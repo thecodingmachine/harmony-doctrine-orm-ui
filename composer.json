@@ -1,0 +1,24 @@
+{
+    "name": "harmony/doctrine-orm-ui",
+    "type": "library",
+    "description": "This package is an Harmony module that provides a user interface for Doctrine ORM.",
+    "keywords": ["harmony", "doctrine"],
+    "homepage": "http://mouf-php.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David Négrier",
+            "email": "d.negrier@thecodingmachine.com",
+            "homepage": "http://mouf-php.com"
+        }
+    ],
+    "require": {
+    	  "php": ">=5.4.0",
+        "harmony/harmony-module-interface": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Harmony\\Doctrine\\": "src/"
+        }
+    }
+}
