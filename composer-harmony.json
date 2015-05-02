@@ -1,4 +1,11 @@
 {
+    "repositories": [
+        {
+        "type": "vcs",
+        "url": "https://github.com/framework-interop/silex-module"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
     	"php": ">=5.4.0",
         "mouf/mvc.splash": "~6.0",
