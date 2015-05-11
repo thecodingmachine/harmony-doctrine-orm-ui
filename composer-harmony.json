@@ -16,5 +16,15 @@
         "psr-4": {
             "Harmony\\Doctrine\\": "src/"
         }
+    },
+    "framework-interop": {
+        "module-factory": [
+            {
+                "name" : "doctrine-orm-module",
+                "description" : "Doctrine module",
+                "module" : "new Harmony\\Doctrine\\DoctrineOrmUiModule($silexModule)",
+                "priority" : 10
+            }
+        ]
     }
 }
