@@ -1,0 +1,32 @@
+{
+    "repositories": [
+        {
+        "type": "vcs",
+        "url": "https://github.com/framework-interop/silex-module"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    	"php": ">=5.4.0",
+        "mouf/mvc.splash": "~6.0",
+        "framework-interop/silex-module": "~1.0",
+        "framework-interop/http-module-interface": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Harmony\\Doctrine\\": "src/"
+        }
+    },
+    "extra": {
+        "framework-interop": {
+            "module-factory": [
+                {
+                    "name" : "doctrine-orm-module",
+                    "description" : "Doctrine module",
+                    "module" : "new Harmony\\Doctrine\\DoctrineOrmUiModule($silexModule)",
+                    "priority" : 10
+                }
+            ]
+        }
+    }
+}
