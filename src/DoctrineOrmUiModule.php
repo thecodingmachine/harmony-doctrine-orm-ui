@@ -2,22 +2,21 @@
 
 namespace Harmony\Doctrine;
 
-use Interop\Framework\HttpModuleInterface;
+use Harmony\Doctrine\Controllers\EntitiesListController;
+use Harmony\Services\MenuService;
 use Interop\Container\ContainerInterface;
-use Mouf\Mvc\Splash\Routers\SplashDefaultRouter;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Interop\Framework\ModuleInterface;
+use Interop\Framework\Silex\AbstractSilexModule;
+use Silex\Application;
+use Silex\Provider\ServiceControllerServiceProvider;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This module provides a hook for adding/modifying instances.
  */
-class DoctrineOrmUiModule extends AbstractSilexModule implements HttpModuleInterface
+class DoctrineOrmUiModule extends AbstractSilexModule implements ModuleInterface
 {
-    private $silexFrameworkModule;
     private $rootContainer;
-
-    public function __construct(SilexFrameworkModule $silexFrameworkModule) {
-        $this->silexFrameworkModule = $silexFrameworkModule;
-    }
 
     public function getName()
     {
@@ -35,22 +34,28 @@ class DoctrineOrmUiModule extends AbstractSilexModule implements HttpModuleInter
      */
     public function init()
     {
+        // The MenuService class is a helper class to edit the menu.
+        $menuService = new MenuService($this->rootContainer);
+        // Let's get an instance of the main menu.
+        $mainMenu = $menuService->getMainMenu();
+        // Let's register a "Doctrine" menu in this main menu.
+        $doctrineMainMenu = $menuService->registerMenuItem("Doctrine", null, $mainMenu);
+        // Finally, let's register a "Main doctrine page" menu in the Doctrine menu.
+        $menuService->registerChooseInstanceMenuItem("Entities list", "doctrine", "Doctrine\\ORM\\EntityManager",
+            $doctrineMainMenu);
+
         // Let's get the silex application
         $app = $this->getSilexApp();
 
-        $app['doctrineEntitiesListController']->share(function($c) {
-            return new DoctrineOrmUiModule($c->get('moufTemplate'));
+        $app->register(new ServiceControllerServiceProvider());
+
+        $app['doctrineEntitiesListController'] = $app->share(function($c) {
+            return new EntitiesListController($c['moufTemplate'], $c['block.content'], $c['block.left']);
         });
 
         // Let's add a route
 
-        // TODO: define a controller here!
-        $app->get('/dpctrine', function (Application $app) {
-            return new Response('Hello world!');
-        });
+        $app->get('/doctrine', 'doctrineEntitiesListController:index');
     }
 
-    public function getHttpMiddleware(HttpKernelInterface $app) {
-        return null;
-    }
 }
